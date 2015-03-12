@@ -1,0 +1,16 @@
+convent : type.
+education : type.
+grace : type.
+novel : type.
+ball : type.
+escapism : type.
+emma : type.
+charles : type.
+emmaCharlesMarried : type.
+
+emmaSpendsYearsInConvent : type = emma * convent -o {@emma * !grace * !education}.
+emmaReadsNovel : type = emma * novel -o {@emma * @escapism}.
+emmaGoesToBall : type = emma * ball -o {@emma * @escapism}.
+emmaMarries : type = emma * escapism * charles * grace -o {@emma * @charles * @emmaCharlesMarried}.
+
+init : type = { @emma * convent * !novel * @charles * @ball * @emmaSpendsYearsInConvent * emmaReadsNovel * @emmaMarries * emmaGoesToBall}.

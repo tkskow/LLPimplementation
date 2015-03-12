@@ -1,0 +1,72 @@
+emma : type.
+charles : type.
+homais : type.
+leon : type.
+rodolphe : type.
+emmaCharlesMarried : type.
+covent : type.
+novels : type.
+grace : type.
+education : type.
+escapism : type.
+emmaIsBored : type.
+ball : type.
+leonIsBored : type.
+leonInlove : type.
+leonInfatuated : type.
+emmaBelievesLeonsLove : type.
+rodolpheDecidedToSeduce : type.
+rodolphePastLoveLife : type.
+rodolpheEmmaTogether : type.
+rodolpheIsBored : type.
+emmaFeelsGuilty : type.
+hypolyteSurgeryPlans : type.
+emmaCharlesHappy : type.
+emmaRebels : type.
+lheureux : type.
+debt : type.
+gift : type.
+rodolpheIsHumiliated : type.
+emmaIsDespaired : type.
+charlesIsConcerned : type.
+emmaInLove : type.
+leonEmmaTogether : type.
+arsenic : type.
+inheritance : type.
+denounced : type.
+ruin : type.
+emmaIsDead : type.
+
+emmaSpendsYearsInCovent : type = emma * covent -o {!novels * !grace * !education * @emma}.
+emmaReadsRomanticNovels : type = emma * novels -o {@escapism * @escapism * @emma}. 
+emmaMarriesCharles  : type = emma * escapism * grace * charles -o {emmaIsBored * @emma *!emmaCharlesMarried}.
+emmaInvitedToBall : type = emma * emmaCharlesMarried * grace -o {@ball * @emma}.
+emmaGoesToBall : type = emma * ball * escapism -o {@escapism * @escapism * @escapism * @escapism * @emma}.
+emmaDoesNotGoToBall : type = emma * ball -o {emmaIsBored * @emma}.
+leonFallsInLove : type = emma * grace * novels * leonIsBored -o {@leonInlove * @emma}.
+emmaDiscoversLeonsLove : type = emma * leonInlove * emmaIsBored -o {@emmaBelievesLeonsLove * @leonInlove * @emma}.
+emmaPushesLeonAway : type = emma * leonInlove * emmaBelievesLeonsLove * emmaCharlesMarried -o {emmaIsBored * @escapism * @emma}.
+rodolpheDecidesToSeduceEmma : type = emma * grace * emmaCharlesMarried -o {@rodolpheDecidedToSeduce * @emma}.
+emmaAcceptsRodolpheAdvances : type = emma * escapism * escapism * escapism * escapism * rodolpheDecidedToSeduce -o {@rodolpheEmmaTogether * @emma}.
+rodolpheRelationshipFalters : type =  emma * rodolpheEmmaTogether -o {@rodolpheIsBored * @emmaFeelsGuilty * @rodolpheEmmaTogether * @emma}. 
+charlesDecidesToOperateHypolyte : type = emma * charles * emmaCharlesMarried * emmaFeelsGuilty * homais -o {@hypolyteSurgeryPlans * @emmaCharlesHappy * @emma}.
+hypolyteIsAmputated : type = emma * charles * emmaCharlesHappy * hypolyteSurgeryPlans -o {!emmaRebels * !lheureux * @emma}.
+emmaPurchasesGift : type = emma * rodolpheEmmaTogether * lheureux -o {@debt * @gift * @emma * @rodolpheEmmaTogether}.
+emmaOffersGift : type = emma *  rodolpheEmmaTogether * gift -o {@rodolpheIsHumiliated * @emma * @rodolpheEmmaTogether}.
+emmaPurchasesProstheticLeg : type = emma * emmaRebels * lheureux -o {@debt * @debt * @emma}.
+rodolpheBreaksUp : type = emma * rodolpheIsBored * rodolpheIsHumiliated * rodolphePastLoveLife * rodolpheEmmaTogether -o {@emmaIsDespaired * @emma}.
+emmaJumpsThroughWindow : type = emma * emmaIsDespaired * emmaRebels -o {@emmaIsDead}.
+emmaGetsSick : type = emma * emmaIsDespaired -o {@debt * @debt * @debt * @debt * !charlesIsConcerned * @emma}.
+emmaMeetsLeon : type = emma * charlesIsConcerned * homais * grace * education -o {@leonInfatuated * @emmaInLove * @emma}.
+emmaAcceptsLeonsAdvances : type = emma * leonInfatuated * emmaInLove * emmaRebels -o {@leonEmmaTogether * @emmaInLove * @leonInfatuated * @emma}.
+emmaLearnsBovaryFatherDeath : type = emma * leonEmmaTogether * charlesIsConcerned * homais -o {@arsenic * @inheritance * @leonEmmaTogether * @emma}.
+emmaReimbursesSomeDebt : type = emma * inheritance * lheureux * debt * debt * debt * debt -o {@emma}.
+leonsMotherReceivesAnonymousLetter : type = emma * emmaCharlesMarried * leonEmmaTogether -o {@denounced * @leonEmmaTogether * @emma}.
+emmasLoveForLeonFalters : type = emma * leonEmmaTogether * emmaInLove -o {@emmaIsBored * @emma * @leonEmmaTogether}.
+bossDiscussesEmmaWithLeon : type = emma * leonEmmaTogether * leonInfatuated * denounced -o {@emma * @leonEmmaTogether}.
+emmaContractsDebts : type = emma * emmaIsBored -o {@debt * @emma}.
+emmaContractsImportantDebts : type = emma * emmaIsBored -o {@debt * @debt * @debt * @emma}.
+emmaBecomesRuined : type = emma * debt * debt * debt * debt * debt * debt * debt -o {@ruin * @emma}.
+emmaCommitsSuicide : type = emma * ruin * arsenic * emmaRebels -o {@emmaIsDead}.
+
+init : type = { covent * @emma * @leonIsBored * !charles * !rodolphePastLoveLife * !homais * @emmaSpendsYearsInCovent * @emmaReadsRomanticNovels * @emmaReadsRomanticNovels * @emmaInvitedToBall * @emmaMarriesCharles * @(emmaGoesToBall & emmaDoesNotGoToBall) * @leonFallsInLove * @emmaDiscoversLeonsLove * @emmaPushesLeonAway * @rodolpheDecidesToSeduceEmma * @emmaAcceptsRodolpheAdvances * @rodolpheRelationshipFalters * @charlesDecidesToOperateHypolyte * @hypolyteIsAmputated * @emmaPurchasesGift * @emmaOffersGift * @emmaPurchasesProstheticLeg * @rodolpheBreaksUp * @emmaJumpsThroughWindow * @emmaGetsSick * @emmaMeetsLeon * @emmaAcceptsLeonsAdvances * @emmaLearnsBovaryFatherDeath * @emmaReimbursesSomeDebt * @leonsMotherReceivesAnonymousLetter * @emmasLoveForLeonFalters * bossDiscussesEmmaWithLeon * !emmaContractsDebts * !emmaContractsImportantDebts * @emmaBecomesRuined * @emmaCommitsSuicide}.
