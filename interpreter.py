@@ -176,40 +176,29 @@ def solver(query,atoms,actions,sequence=[],nest=0,pop=None):
 		for x in i.needs:
 			if x in copyAvailableAtoms:
 				if not x.persisten:
-					#print x.name + " : is removed"
 					copyAvailableAtoms.remove(x)
 					tempAtoms.append(x)
 				if not (x.affine or x.persisten):
 					aLinearExists += -1
-				#print x.name + " is available"
 				checker += 1
-		#print "checker: " + str(checker) + " arguments: " + str(arguments)
+
 		if checker == arguments:
 
 			sequence.append(i)
 			availableNext.remove(i)
 			for y in i.result:
-
-				#print "append result: " + y.name
 				copyAvailableAtoms.append(y)
 				if not (y.affine or y.persisten):
 					aLinearExists += 1
-				#print y.name + " " + str(y.affine)
 				if y.name == query:
 					goal = False
-
 					if aLinearExists == 0:
 						linear = False
-						#print sequence
-						#result.append(sequence)
 						return False
 					return True
-					
-						
-						
+			
 			if i.persisten:
 				availableNext.append(i)
-
 					
 			if goal:
 				temp = solver(query,copyAvailableAtoms,availableNext,sequence,nest+1)
@@ -248,12 +237,6 @@ def solver(query,atoms,actions,sequence=[],nest=0,pop=None):
 		else:
 			for x in tempAtoms:
 				copyAvailableAtoms.append(x)
-
-	
-
-
-
-
 
 
 
