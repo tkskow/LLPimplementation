@@ -13,12 +13,22 @@ class Atomic:
 		self.persisten = persisten
 		self.addative = addative
 
+   	def __key(self):
+   		return self.name
+
+	def __eq__(x, y):
+		return x.name == y.name
+
+	def __hash__(self):
+		return hash(self.__key())
+	def __repr__(self):
+		return self.name
 
 class Actions:
 	def __init__(self,name,string,affine=False,persisten=False, addative=[]):
 		self.name = name
-		self.needs = []
-		self.result = []
+		self.needs = set([])
+		self.result = set([])
 		self.affine = affine
 		self.persisten = persisten
 		self.addative = addative
@@ -39,7 +49,7 @@ class Actions:
 			isAtom = False
 			for x in atomicbase:
 				if i == x.name:
-					self.needs.append(x)
+					self.needs.add(x)
 					isAtom = True
 			if not isAtom:
 				print "This type is not Atomic: " + i
@@ -60,15 +70,50 @@ class Actions:
 				if i == x.name:
 					x.persisten = persisten
 					x.affine = affine
-					self.result.append(x)
+					self.result.add(x)
 					isAtom = True
 
 			if not isAtom:
 				print "This type is not Atomic: " + i
 				sys.exit(0)
-			
+
 	def __repr__(self):
 		return self.name
+results = []
+def find_path(query, atoms, action, actions, lastatoms, sequence = []):
+	myNextActions = []
+
+	if atoms == lastatoms:
+		return None
+	if (query in atoms):
+		results.append(sequence)
+		return sequence
+	for action in actions:
+		if (action.needs.issubset(atoms)):
+			myNextActions.append(action)
+
+	for action in myNextActions:
+
+		atoms1 = atoms.difference(action.needs)
+		atoms1 = atoms.union(action.result)
+		if (action not in sequence):
+			sequence.append(action)
+			find_path(query, atoms1, action, actions, atoms, sequence)
+
+	return None
+
+
+
+
+
+
+def solver(query,atoms,actions,sequence=[],pop=None):
+	query = Atomic(query)
+
+	for action in actions:
+		if action.needs.issubset(atoms):
+			print find_path(query, atoms, action, actions, [action])
+	return results
 
 
 def parse(file=sys.argv[1]):
@@ -146,83 +191,6 @@ def parse(file=sys.argv[1]):
 			atomicbase.append(Atomic(s[0]))
 
 
-def solver(query,atoms,actions,sequence=[],pop=None):
-	linear = False
-	goal = False
-	#test = []
-	tempPop = None
-	tempRemove = []
-	availableNext = []
-	aLinearExists = 0
-	copyAvailableAtoms = []
-	copyOfSequence = []
-	resultSequence = []
-
-	for i in actions:
-		availableNext.append(i)
-		if not (i.affine or i.persisten):
-			aLinearExists += 1
-
-	for i in atoms:
-		copyAvailableAtoms.append(i)
-		if not (i.affine or i.persisten):
-			aLinearExists += 1
-	
-	for i in sequence:
-		copyOfSequence.append(i)
-		
-
-	for i in actions:
-
-		if i == pop:
-			continue
-		
-		arguments = len(i.needs)
-		checker = 0 
-		tempAtoms = []
-		for x in i.needs:
-			if x in copyAvailableAtoms:
-				if not x.persisten:
-					copyAvailableAtoms.remove(x)
-					tempAtoms.append(x)
-				if not (x.affine or x.persisten):
-					aLinearExists += -1
-				checker += 1
-
-		if checker == arguments:
-
-			copyOfSequence.append(i)
-			availableNext.remove(i)
-			for y in i.result:
-				copyAvailableAtoms.append(y)
-				if not (y.affine or y.persisten):
-					aLinearExists += 1
-				if y.name == query:
-					goal = True
-					if aLinearExists == 0:
-						linear = True
-						return copyOfSequence
-	
-			if i.persisten:
-				availableNext.append(i)
-
-		
-				#sequence = (solver(query,copyAvailableAtoms,availableNext,copyOfSequence))
-				#if result[-1] != None:
-					#return result
-				#print "//////// : "  + i.name
-		if goal == False:
-			print i
-			print availableNext
-			print solver(query, copyAvailableAtoms, availableNext, copyOfSequence)
-				
-
-		else:
-			for x in tempAtoms:
-				copyAvailableAtoms.append(x)
-
-
-	return []
 
 
 
@@ -230,17 +198,17 @@ def solver(query,atoms,actions,sequence=[],pop=None):
 if __name__ == '__main__':
 	parse()
 
-	availableAtoms = []
-	availableActions = []
+	availableAtoms = set([])
+	availableActions = set([])
 	result = []
 	for x in initialbase:
 		if x in atomicbase:
-			availableAtoms.append(x)
+			availableAtoms.add(x)
 		else:
-			availableActions.append(x)
+			availableActions.add(x)
 
-	#temp =solver("emmaIsDead",availableAtoms,availableActions)
-	temp = solver("emmaCharlesMarried", availableAtoms, availableActions)
+	temp =solver("emmaIsDead",availableAtoms,availableActions)
+	#temp = solver("emmaCharlesMarried", availableAtoms, availableActions)
 
 	if len(temp) == 0:
 		print "could not find a solution: "
@@ -248,11 +216,5 @@ if __name__ == '__main__':
 	else:
 		print "========\nThe solution is:"
 		print len(temp)
-		for i in result:
+		for i in temp:
 			print i
-			for x in i:
-				print x.name
-	#print temp
-	#	print len(temp)
-	for x in temp:
-		print x.name
