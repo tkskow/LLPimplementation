@@ -13,4 +13,4 @@ emmaReadsNovel : type = emma * novel -o {@emma * @escapism}.
 emmaGoesToBall : type = emma * ball -o {@emma * @escapism}.
 emmaMarries : type = emma * escapism * charles * grace -o {@emma * @charles * @emmaCharlesMarried}.
 
-init : type = { @emma * convent * !novel * @charles * @ball * @emmaSpendsYearsInConvent * emmaReadsNovel * @emmaMarries * emmaGoesToBall}.
+init : type = { @emma * convent * !novel * @charles * @ball * @emmaSpendsYearsInConvent * @emmaReadsNovel * @emmaMarries * @emmaGoesToBall}.
